@@ -15,6 +15,8 @@ COPY pyproject.toml poetry.lock ./
 RUN poetry config virtualenvs.create false
 RUN poetry install --no-interaction --no-ansi --without dev
 
+RUN playwright install
+
 # copy and run program
 COPY ./src/ /code
 # CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
