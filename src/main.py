@@ -4,6 +4,8 @@ from operator import itemgetter
 from fastapi import FastAPI, Query, APIRouter
 from scraping import get_products, URLS_PRODUCTS
 
+menu = dict(URLS_PRODUCTS)
+
 
 class BasicAPI:
     def __init__(self, name: str):
