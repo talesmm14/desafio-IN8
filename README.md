@@ -8,11 +8,11 @@ Nesse desafio foi realizado a construção de um robô, que deve entrar no [site
 
 
 Para isso a API foi construída com FastAPI, o método construído para realizar o desafio e:
-```http://127.0.0.1:8000/products/laptops?search=Lenovo&sort_by_price=true```
+```http://0.0.0.0:8000/products/laptops?search=Lenovo&sort_by_price=true```
 
 
 A documentação completa da API pode ser acessada em:
-```http://127.0.0.1:8000/docs```
+```http://0.0.0.0:8000/docs```
 
 Como bônus eu fiz o robô funcionar em todos as listas de produtos do [site](https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops), por favor visualizar a documentação da API.
 
