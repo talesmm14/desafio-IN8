@@ -16,6 +16,11 @@ A documentação completa da API pode ser acessada em:
 
 Como bônus eu fiz o robô funcionar em todos as listas de produtos do [site](https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops), por favor visualizar a documentação da API.
 
+# Imagens
+
+![Docs](images/docs.png)
+![Json](images/json.png)
+
 ## Ferramentas utilizadas
 - Poetry
 - FastApi
