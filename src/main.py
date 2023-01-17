@@ -1,50 +1,68 @@
 import uvicorn
 import asyncio
-from fastapi import FastAPI
+from operator import itemgetter
+from fastapi import FastAPI, Query, APIRouter
 from scraping import get_products, URLS_PRODUCTS
 
-menu = dict(URLS_PRODUCTS)
+
+class BasicAPI:
+    def __init__(self, name: str):
+        self.name = name
+        self.router = APIRouter()
+        self.url = dict(URLS_PRODUCTS)[self.name]
+        self.router.add_api_route(f"/products/{self.name}", self.basic_return, methods=["GET"])
+        
+    async def basic_return(
+        self, 
+        search: str | None = Query(
+            default=None,
+            description="Search by product name"
+            ), 
+        sort_by_price: bool = Query(
+            default=True,
+            description="Sort by price"
+            )
+        ):
+        products = await get_products(self.url)
+        if search:
+            products = [product for product in products if product['name'].find(search) == 0]
+        if not sort_by_price:
+            products = sorted(products, key=itemgetter('price'))
+        return products
+
 
 app = FastAPI()
+        
+        
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World!"}
+    return {"message": "API desafio IN8, by Tales Monteiro Melquiades."}
 
 
 @app.get("/products/")
-async def products():
-    return await get_products()
+async def products(
+    search: str | None = Query(
+        default=None,
+        description="Search by product name"
+        ), 
+    sort_by_price: bool = Query(
+        default=True,
+        description="Sort by price"
+        )
+    ):
+    products = await get_products(menu['phones'])
+    if search:
+        products = [product for product in products if product['name'].find(search) == 0]
+    if not sort_by_price:
+        products = sorted(products, key=itemgetter('price'))
+    return products
 
-
-@app.get(f"/products/{menu['computers']}")
-async def computers():
-    return await get_products(menu['computers'])
-
-
-@app.get(f"/products/{menu['laptops']}")
-async def laptops():
-    return await get_products(menu['laptops'])
-
-
-@app.get(f"/products/{menu['phones']}")
-async def phones():
-    return await get_products(menu['phones'])
-
-
-@app.get(f"/products/{menu['tablets']}")
-async def tablets():
-    return await get_products(menu['tablets'])
-
-
-@app.get(f"/products/{menu['tablets']}")
-async def tablets():
-    return await get_products(menu['tablets'])
-
-
-@app.get(f"/products/{menu['touch']}")
-async def touch():
-    return await get_products(menu['touch'])
+app.include_router(BasicAPI("computers").router)
+app.include_router(BasicAPI("laptops").router)
+app.include_router(BasicAPI("tablets").router)
+app.include_router(BasicAPI("phones").router)
+app.include_router(BasicAPI("touch").router)
 
 
 if __name__ == "__main__":
